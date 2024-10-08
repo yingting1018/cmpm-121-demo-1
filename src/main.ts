@@ -14,10 +14,27 @@ button.textContent = "🐱";
 app.append(button);
 
 const counterDisplay = document.createElement("div");
-counterDisplay.textContent = "Meow: 0"; 
+counterDisplay.textContent = "Meow: 0";
 app.append(counterDisplay);
 let clickCount = 0;
-button.addEventListener("click", () => {
+let isCounting = false;
+
+const time = () => 
+{
+    if (!isCounting)
+    {
+        isCounting = true;
+        setInterval(() => 
+        {
+            clickCount++;
+            counterDisplay.textContent = `Meows: ${clickCount}`;
+        }, 1000);
+    }
+};
+button.addEventListener("click", () =>
+{
     clickCount++;
     counterDisplay.textContent = `Meows: ${clickCount}`;
-});
+    time();
+})
+time();
