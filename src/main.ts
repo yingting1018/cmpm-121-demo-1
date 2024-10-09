@@ -17,24 +17,32 @@ const counterDisplay = document.createElement("div");
 counterDisplay.textContent = "Meow: 0";
 app.append(counterDisplay);
 let clickCount = 0;
-let isCounting = false;
+// let isCounting = false;
 
-const time = () => 
+// const time = () => {
+  // if (!isCounting) {
+  //   isCounting = true;
+  //   setInterval(() => {
+  //     clickCount++;
+  //     counterDisplay.textContent = `Meows: ${clickCount}`;
+//   //   }, 1000);
+//   }
+// };
+button.addEventListener("click", () => {
+  clickCount++;
+  counterDisplay.textContent = `Meows: ${clickCount}`;
+  // time();
+});
+// time();
+
+let previousTime: number = performance.now()
+function updateCount() 
 {
-    if (!isCounting)
-    {
-        isCounting = true;
-        setInterval(() => 
-        {
-            clickCount++;
-            counterDisplay.textContent = `Meows: ${clickCount}`;
-        }, 1000);
-    }
-};
-button.addEventListener("click", () =>
-{
-    clickCount++;
-    counterDisplay.textContent = `Meows: ${clickCount}`;
-    time();
-})
-time();
+  const currentTime = performance.now()
+  const increment = (currentTime - previousTime)
+  clickCount += (increment / 1000)
+  counterDisplay.innerHTML = `${Math.round(clickCount)} Meows`;
+  previousTime = currentTime
+  requestAnimationFrame(updateCount)
+}
+requestAnimationFrame(updateCount);
