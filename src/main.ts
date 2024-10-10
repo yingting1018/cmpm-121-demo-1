@@ -17,32 +17,46 @@ const counterDisplay = document.createElement("div");
 counterDisplay.textContent = "Meow: 0";
 app.append(counterDisplay);
 let clickCount = 0;
-// let isCounting = false;
 
-// const time = () => {
-  // if (!isCounting) {
-  //   isCounting = true;
-  //   setInterval(() => {
-  //     clickCount++;
-  //     counterDisplay.textContent = `Meows: ${clickCount}`;
-//   //   }, 1000);
-//   }
-// };
 button.addEventListener("click", () => {
   clickCount++;
-  counterDisplay.textContent = `Meows: ${clickCount}`;
-  // time();
+  // counterDisplay.textContent = `Meows: ${clickCount}`;
+  // updateShopButton();
 });
 // time();
+// function updateShopButton()
+// {
+//   shop.disabled = clickCount < 10;
+// }
 
-let previousTime: number = performance.now()
-function updateCount() 
+const shop = document.createElement("button");
+shop.textContent = "🍀";
+shop.disabled = true;
+app.append(shop);
+
+shop.addEventListener("click", () =>
 {
-  const currentTime = performance.now()
-  const increment = (currentTime - previousTime)
-  clickCount += (increment / 1000)
+  growthRate++;
+  clickCount = clickCount - 10;
+});
+let growthRate = 1;
+
+let previousTime: number = performance.now();
+function updateCount() {
+  if (clickCount >= 10)
+  {
+    shop.disabled = false;
+  }
+  if (clickCount < 10)
+  {
+    shop.disabled = true;
+  }
+  const currentTime = performance.now();
+  const increment = currentTime - previousTime;
+  clickCount += increment / 1000 * growthRate;
   counterDisplay.innerHTML = `${Math.round(clickCount)} Meows`;
-  previousTime = currentTime
-  requestAnimationFrame(updateCount)
+  previousTime = currentTime;
+  requestAnimationFrame(updateCount);
 }
 requestAnimationFrame(updateCount);
+// updateShopButton();
