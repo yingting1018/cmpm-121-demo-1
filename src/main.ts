@@ -21,18 +21,22 @@ let clickCount = 0;
 button.addEventListener("click", () => {
   clickCount++;
 });
+
+let priceA = 10;
+let priceB = 100;
+let priceC = 1000;
 const shopA = document.createElement("button");
-shopA.textContent = "Good Luck 🍀";
+shopA.textContent = `Good Luck 🍀 - Price: ${priceA}`;
 shopA.disabled = true;
 app.append(shopA);
 
 const shopB = document.createElement("button");
-shopB.textContent = "Super Luck 🍀";
+shopB.textContent = `Super Luck 🍀 - Price: ${priceB}`;
 shopB.disabled = true;
 app.append(shopB);
 
 const shopC = document.createElement("button");
-shopC.textContent = "Amazing Luck 🍀";
+shopC.textContent = `Amazing Luck 🍀 - Price: ${priceC}`;
 shopC.disabled = true;
 app.append(shopC);
 
@@ -53,25 +57,40 @@ shopCCountDisplay.textContent = `Amazing Luck Purchases: ${shopCCount}`;
 app.append(shopCCountDisplay);
 
 shopA.addEventListener("click", () => {
-  growthRate+= 0.1;
-  clickCount = clickCount - 10;
-  shopACount++;
-  growthRateDisplay.textContent = `Current Growth Rate: ${growthRate.toFixed(1)}`;
-  shopACountDisplay.textContent = `Good Luck Purchases: ${shopACount}`;
+  if (clickCount >= priceA)
+  {
+    growthRate += 0.1;
+    clickCount -= priceA;
+    shopACount++;
+    priceA = priceA * 1.15;
+    shopA.textContent = `Good Luck 🍀 - Price: ${priceA.toFixed(1)}`;
+    growthRateDisplay.textContent = `Current Growth Rate: ${growthRate.toFixed(1)}`;
+    shopACountDisplay.textContent = `Good Luck Purchases: ${shopACount}`;
+  }
 });
 shopB.addEventListener("click", () => {
-  growthRate = growthRate*2;
-  clickCount = clickCount - 100;
-  shopBCount++;
-  shopBCountDisplay.textContent = `Super Luck Purchases: ${shopBCount}`;
-  growthRateDisplay.textContent = `Current Growth Rate: ${growthRate.toFixed(1)}`;
+  if (clickCount >= priceB)
+  {
+    growthRate = growthRate * 2;
+    clickCount -= priceB;
+    shopBCount++;
+    priceB = priceB * 1.15;
+    shopB.textContent = `Super Luck 🍀 - Price: ${priceB.toFixed(1)}`;
+    growthRateDisplay.textContent = `Current Growth Rate: ${growthRate.toFixed(1)}`;
+    shopBCountDisplay.textContent = `Super Luck Purchases: ${shopBCount}`;
+  }
 });
 shopC.addEventListener("click", () => {
-  growthRate = growthRate*50;
-  clickCount = clickCount - 1000;
-  shopCCount++;
-  shopCCountDisplay.textContent = `Amazing Luck Purchases: ${shopCCount}`;
-  growthRateDisplay.textContent = `Current Growth Rate: ${growthRate.toFixed(1)}`;
+  if (clickCount >= priceC)
+  {
+    growthRate = growthRate * 50;
+    clickCount -= priceC;
+    shopCCount++;
+    priceC = priceC * 1.15;
+    shopC.textContent = `Amazing Luck 🍀 - Price: ${priceC.toFixed(1)}`;
+    growthRateDisplay.textContent = `Current Growth Rate: ${growthRate.toFixed(1)}`;
+    shopCCountDisplay.textContent = `Amazing Luck Purchases: ${shopCCount}`;
+  }
 });
 
 let growthRate = 1;
@@ -84,13 +103,13 @@ PurchaseADisplay.textContent = `Current Growth Rate: ${growthRate}`;
 let previousTime: number = performance.now();
 
 function updateCount() {
-  if (clickCount >= 10) {
+  if (clickCount >= priceA) {
     shopA.disabled = false;
   }
-  if (clickCount >= 100) {
+  if (clickCount >= priceB) {
     shopB.disabled = false;
   }
-  if (clickCount >= 1000) {
+  if (clickCount >= priceC) {
     shopC.disabled = false;
   }
   if (clickCount < 10) {
