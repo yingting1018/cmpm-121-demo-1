@@ -10,17 +10,26 @@ header.innerHTML = gameName;
 app.append(header);
 
 const button = document.createElement("button");
+button.classList.add("cat-button");
 button.textContent = "🐱";
 app.append(button);
 
 const counterDisplay = document.createElement("div");
+counterDisplay.classList.add("counter");
 counterDisplay.textContent = "Meow: 0";
 app.append(counterDisplay);
 let clickCount = 0;
 
 button.addEventListener("click", () => {
   clickCount++;
+  if (button.textContent === "🐱") {
+    button.textContent = "😺"; 
+  } else {
+    button.textContent = "🐱"; 
+  }
 });
+
+
 
 let priceA = 10;
 let priceB = 100;
@@ -57,8 +66,7 @@ shopCCountDisplay.textContent = `Amazing Luck Purchases: ${shopCCount}`;
 app.append(shopCCountDisplay);
 
 shopA.addEventListener("click", () => {
-  if (clickCount >= priceA)
-  {
+  if (clickCount >= priceA) {
     growthRate += 0.1;
     clickCount -= priceA;
     shopACount++;
@@ -69,8 +77,7 @@ shopA.addEventListener("click", () => {
   }
 });
 shopB.addEventListener("click", () => {
-  if (clickCount >= priceB)
-  {
+  if (clickCount >= priceB) {
     growthRate = growthRate * 2;
     clickCount -= priceB;
     shopBCount++;
@@ -81,8 +88,7 @@ shopB.addEventListener("click", () => {
   }
 });
 shopC.addEventListener("click", () => {
-  if (clickCount >= priceC)
-  {
+  if (clickCount >= priceC) {
     growthRate = growthRate * 50;
     clickCount -= priceC;
     shopCCount++;

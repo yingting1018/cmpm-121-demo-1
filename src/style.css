@@ -43,6 +43,13 @@ h1 {
   text-align: center;
 }
 
+.cat-button
+{
+  font-size: 7em;
+  padding: 1em 2em;
+  border: none;
+  background: transparent;
+}
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -68,7 +75,7 @@ shop {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #ffe6e6;
+  background-color: #d5ffdd;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -83,12 +90,18 @@ shop:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #ffe8e8;
   }
   a:hover {
-    color: #747bff;
+    color: transparent;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #d8ffb3;
   }
+}
+.counter
+{
+  font-family: 'Bubblegum Sans', cursive;
+  font-size: 2em;
+  color:rgb(255, 160, 160); 
 }
