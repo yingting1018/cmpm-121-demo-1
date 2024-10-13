@@ -22,111 +22,167 @@ let clickCount = 0;
 
 button.addEventListener("click", () => {
   clickCount++;
-  if (button.textContent === "🐱") {
-    button.textContent = "😺"; 
-  } else {
-    button.textContent = "🐱"; 
-  }
+  button.textContent = button.textContent === "🐱" ? "😺" : "🐱";
 });
 
+interface Item {
+  name: string,
+  price: number,
+  growth: number
+  desc: string
+};
+
+const availableItems : Item[] = [
+  {name: "Good Luck 🍀", price: 10, growth: 0.1, desc: "Increases your growth rate by 0.2!"},
+  {name: "Super Luck 🍀", price: 100, growth: 2, desc: "Increases your growth rate by 2!"},
+  {name: "Amazing Luck 🍀", price: 1000, growth: 50, desc: "Increases your growth rate by 50!"},
+  {name: "Mystical Luck 🍀", price: 500, growth: 0, desc: "Increases your growth rate by 5 for 10 seconds!"},
+  {name: "Mystery Luck 🎲", price: 50, growth: 0, desc: "Chance of winning either 500 meows or losing 100.. Buy at your own risk!"},
+];
 
 
-let priceA = 10;
-let priceB = 100;
-let priceC = 1000;
-const shopA = document.createElement("button");
-shopA.textContent = `Good Luck 🍀 - Price: ${priceA}`;
-shopA.disabled = true;
-app.append(shopA);
+const shopButtons: HTMLButtonElement[] = [];
 
-const shopB = document.createElement("button");
-shopB.textContent = `Super Luck 🍀 - Price: ${priceB}`;
-shopB.disabled = true;
-app.append(shopB);
 
-const shopC = document.createElement("button");
-shopC.textContent = `Amazing Luck 🍀 - Price: ${priceC}`;
-shopC.disabled = true;
-app.append(shopC);
 
-let shopACount = 0;
-let shopBCount = 0;
-let shopCCount = 0;
-
-const shopACountDisplay = document.createElement("div");
-shopACountDisplay.textContent = `Good Luck Purchases: ${shopACount}`;
-app.append(shopACountDisplay);
-
-const shopBCountDisplay = document.createElement("div");
-shopBCountDisplay.textContent = `Super Luck Purchases: ${shopBCount}`;
-app.append(shopBCountDisplay);
-
-const shopCCountDisplay = document.createElement("div");
-shopCCountDisplay.textContent = `Amazing Luck Purchases: ${shopCCount}`;
-app.append(shopCCountDisplay);
-
-shopA.addEventListener("click", () => {
-  if (clickCount >= priceA) {
-    growthRate += 0.1;
-    clickCount -= priceA;
-    shopACount++;
-    priceA = priceA * 1.15;
-    shopA.textContent = `Good Luck 🍀 - Price: ${priceA.toFixed(1)}`;
-    growthRateDisplay.textContent = `Current Growth Rate: ${growthRate.toFixed(1)}`;
-    shopACountDisplay.textContent = `Good Luck Purchases: ${shopACount}`;
-  }
-});
-shopB.addEventListener("click", () => {
-  if (clickCount >= priceB) {
-    growthRate = growthRate * 2;
-    clickCount -= priceB;
-    shopBCount++;
-    priceB = priceB * 1.15;
-    shopB.textContent = `Super Luck 🍀 - Price: ${priceB.toFixed(1)}`;
-    growthRateDisplay.textContent = `Current Growth Rate: ${growthRate.toFixed(1)}`;
-    shopBCountDisplay.textContent = `Super Luck Purchases: ${shopBCount}`;
-  }
-});
-shopC.addEventListener("click", () => {
-  if (clickCount >= priceC) {
-    growthRate = growthRate * 50;
-    clickCount -= priceC;
-    shopCCount++;
-    priceC = priceC * 1.15;
-    shopC.textContent = `Amazing Luck 🍀 - Price: ${priceC.toFixed(1)}`;
-    growthRateDisplay.textContent = `Current Growth Rate: ${growthRate.toFixed(1)}`;
-    shopCCountDisplay.textContent = `Amazing Luck Purchases: ${shopCCount}`;
-  }
-});
-
+let shopPurchases: number[] = [0, 0, 0, 0, 0];
+let index = 0;
 let growthRate = 1;
+let boost = false;
+let boosttime = 10000;
+let originalGrowthRate = growthRate;
+for (const item of availableItems)
+{
+  const shopButton = document.createElement("button");
+  shopButton.disabled = true;
+  app.append(shopButton);
+  shopButton.textContent = `${item.name} - Price: ${item.price} ≽^-˕-^≼ : ${item.desc}`;
+  shopButton.addEventListener("click", () => handleClick(item, shopButton, shopCountDisplay));
+  shopButtons.push(shopButton);
+  const shopCountDisplay = document.createElement("div");
+  app.append(shopCountDisplay);
+  shopCountDisplay.textContent = `${item.name} Purchases: ${shopPurchases[index]}`;
+  index++;
+}
+
+  function handleClick(item: Item, shopButton: HTMLButtonElement, shopCountDisplay: HTMLDivElement)
+  {
+    clickCount -= item.price;
+    item.price = item.price * 1.15;
+    growthRate += item.growth;
+    if (item.name == "Good Luck 🍀")
+    {
+      shopPurchases[0]++;
+      shopCountDisplay.textContent = `${item.name} Purchases: ${shopPurchases[0]}`;
+    }
+    else if (item.name == "Super Luck 🍀")
+    {
+      shopPurchases[1]++;
+      shopCountDisplay.textContent = `${item.name} Purchases: ${shopPurchases[1]}`;
+    }
+    else if (item.name == "Amazing Luck 🍀")
+    {
+      shopPurchases[2]++;
+      shopCountDisplay.textContent = `${item.name} Purchases: ${shopPurchases[2]}`;
+    }
+    else if (item.name == "Mystical Luck 🍀")
+    {
+      activateMysticalLuck();
+      shopPurchases[3]++;
+      shopCountDisplay.textContent = `${item.name} Purchases: ${shopPurchases[3]}`;
+    }
+    else if (item.name == "Mystery Luck 🎲")
+    {
+      startMysteryLuck(shopButton);
+      shopPurchases[4]++;
+      shopCountDisplay.textContent = `${item.name} Purchases: ${shopPurchases[4]}`;
+    }
+    shopButton.textContent = `${item.name} - Price: ${item.price.toFixed(1)}`;
+    growthRateDisplay.textContent = `Current Growth Rate: ${growthRate.toFixed(1)}`;
+  }
+
+function activateMysticalLuck()
+{
+  if (!boost)
+  {
+    boost = true;
+    growthRate *= 5;
+    setTimeout(() =>
+    {
+      growthRate = originalGrowthRate;
+      boost = false;
+      growthRateDisplay.textContent = `Current Growth Rate: ${growthRate}`;
+    }, boosttime)
+  }
+}
+function startMysteryLuck(shopButton: HTMLButtonElement)
+{
+  if (clickCount >= availableItems[4].price)
+  {
+    clickCount -= availableItems[4].price;
+    const outcome = Math.random();
+    if (outcome < 0.5)
+    {
+      clickCount -= 100;
+    }
+    else {
+      clickCount += 500;
+    }
+    shopButton.textContent = `${availableItems[4].name} - Price: ${availableItems[4].price.toFixed(1)}`;
+    counterDisplay.innerHTML = `${Math.round(clickCount)} Meows`;
+    availableItems[4].price *= 1.15;
+  }
+}
 const growthRateDisplay = document.createElement("div");
 growthRateDisplay.textContent = `Current Growth Rate: ${growthRate}`;
 app.append(growthRateDisplay);
 
-const PurchaseADisplay = document.createElement("div");
-PurchaseADisplay.textContent = `Current Growth Rate: ${growthRate}`;
 let previousTime: number = performance.now();
 
-function updateCount() {
-  if (clickCount >= priceA) {
-    shopA.disabled = false;
+
+function updateCount()
+{
+  if (clickCount >= availableItems[0].price)
+  {
+    shopButtons[0].disabled = false;
   }
-  if (clickCount >= priceB) {
-    shopB.disabled = false;
+  else
+  {
+    shopButtons[0].disabled = true;
   }
-  if (clickCount >= priceC) {
-    shopC.disabled = false;
+  if (clickCount >= availableItems[1].price)
+  {
+    shopButtons[1].disabled = false;
   }
-  if (clickCount < 10) {
-    shopA.disabled = true;
+  else
+  {
+    shopButtons[1].disabled = true;
   }
-  if (clickCount < 100) {
-    shopB.disabled = true;
+  if (clickCount >= availableItems[2].price)
+  {
+    shopButtons[2].disabled = false;
   }
-  if (clickCount < 1000) {
-    shopC.disabled = true;
+  else
+  {
+    shopButtons[2].disabled = true;
   }
+  if (clickCount >= availableItems[3].price)
+  {
+    shopButtons[3].disabled = false;
+  }
+  else
+  {
+    shopButtons[3].disabled = true;
+  }
+  if (clickCount >= availableItems[4].price)
+  {
+    shopButtons[4].disabled = false;
+  }
+  else
+  {
+    shopButtons[4].disabled = true;
+  }
+
   const currentTime = performance.now();
   const increment = currentTime - previousTime;
   clickCount += (increment / 1000) * growthRate;
