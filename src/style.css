@@ -32,8 +32,10 @@ body {
 }
 
 h1 {
+  font-family: "Fredoka One", cursive;
   font-size: 3.2em;
   line-height: 1.1;
+  color: #ff69b4;
 }
 
 #app {
@@ -43,8 +45,7 @@ h1 {
   text-align: center;
 }
 
-.cat-button
-{
+.cat-button {
   font-size: 7em;
   padding: 1em 2em;
   border: none;
@@ -99,9 +100,8 @@ shop:focus-visible {
     background-color: #d8ffb3;
   }
 }
-.counter
-{
-  font-family: 'Bubblegum Sans', cursive;
+.counter {
+  font-family: "Bubblegum Sans", cursive;
   font-size: 2em;
-  color:rgb(255, 160, 160); 
+  color: rgb(255, 160, 160);
 }
